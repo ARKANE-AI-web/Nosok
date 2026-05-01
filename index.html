@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nusk Fleet OS - نسك فليت</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Arabic:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0a0a0a;--card:#111;--card2:#141414;--border:rgba(255,255,255,0.08);--text:#fff;--muted:rgba(255,255,255,0.5);--green:#1DB954;--green2:#169c45;--red:#ef4444;--blue:#3b82f6;--amber:#f59e0b;--purple:#a855f7;--cyan:#06b6d4}
+body{font-family:'Inter','Noto Sans Arabic',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{border:none;cursor:pointer;font-family:inherit}
+input,select{font-family:inherit}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:var(--green);border-radius:3px}
+
+/* Layout */
+.page{display:none;min-height:100vh}
+.page.active{display:block}
+
+/* Navbar */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:50;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:rgba(0,0,0,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.navbar-brand{display:flex;align-items:center;gap:12px}
+.logo-box{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--green),var(--green2));display:flex;align-items:center;justify-content:center}
+.logo-box svg{width:20px;height:20px;color:#fff}
+.brand-text{display:flex;flex-direction:column}
+.brand-name{font-weight:800;font-size:16px;line-height:1.2}
+.brand-sub{color:var(--green);font-size:10px;font-weight:600;letter-spacing:1px}
+.nav-links{display:flex;gap:4px}
+.nav-links a{padding:6px 12px;border-radius:8px;font-size:14px;color:rgba(255,255,255,0.7);transition:all .2s}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.nav-cta{background:var(--green);color:#fff;padding:8px 20px;border-radius:10px;font-size:14px;font-weight:600;transition:all .2s;box-shadow:0 0 20px rgba(29,185,84,0.2)}
+.nav-cta:hover{background:var(--green2);transform:scale(1.02)}
+.mobile-toggle{display:none;background:none;color:#fff;font-size:24px}
+
+/* Hero */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:120px 24px 80px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(29,185,84,0.1) 0%, transparent 70%)}
+.hero-content{max-width:1200px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(29,185,84,0.15);color:var(--green);border:1px solid rgba(29,185,84,0.3);padding:6px 16px;border-radius:20px;font-size:14px;font-weight:500;margin-bottom:24px}
+.hero h1{font-size:64px;font-weight:900;line-height:1.1;margin-bottom:24px}
+.hero h1 span{color:var(--green);display:block;margin-top:8px}
+.hero p{font-size:20px;color:var(--muted);line-height:1.7;max-width:540px;margin-bottom:32px}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap}
+.btn-primary{background:var(--green);color:#fff;padding:14px 32px;border-radius:12px;font-size:16px;font-weight:600;box-shadow:0 0 30px rgba(29,185,84,0.25);transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary:hover{background:var(--green2);transform:scale(1.03)}
+.btn-outline{border:1px solid rgba(255,255,255,0.2);color:#fff;padding:14px 32px;border-radius:12px;font-size:16px;font-weight:600;background:transparent;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.btn-outline:hover{background:rgba(255,255,255,0.08)}
+
+.hero-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:24px;backdrop-filter:blur(10px);box-shadow:0 0 40px rgba(29,185,84,0.1)}
+.hero-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.hero-card-title{font-weight:600;font-size:14px}
+.hero-card-sub{font-size:12px;color:var(--muted)}
+.badge-live{background:rgba(29,185,84,0.2);color:var(--green);padding:4px 10px;border-radius:6px;font-size:12px}
+.hero-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.stat-mini{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px}
+.stat-mini svg{width:16px;height:16px;margin-bottom:8px}
+.stat-mini .val{font-size:20px;font-weight:800}
+.stat-mini .lbl{font-size:12px;color:var(--muted)}
+
+.hero-bottom-stats{max-width:1200px;margin:60px auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.stat-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;transition:all .3s}
+.stat-card:hover{background:rgba(255,255,255,0.06)}
+.stat-card .num{font-size:36px;font-weight:900;color:var(--green);margin-bottom:4px}
+.stat-card .txt{font-size:14px;color:var(--muted);font-weight:500}
+
+/* Sections */
+.section{padding:80px 24px;max-width:1200px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:48px}
+.section-badge{display:inline-block;background:rgba(29,185,84,0.1);color:var(--green);border:1px solid rgba(29,185,84,0.2);padding:6px 16px;border-radius:20px;font-size:14px;margin-bottom:16px}
+.section h2{font-size:40px;font-weight:900;margin-bottom:16px}
+.section p.desc{color:var(--muted);font-size:18px;max-width:600px;margin:0 auto}
+
+/* Cards */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;padding:24px;transition:all .3s}
+.card:hover{border-color:rgba(255,255,255,0.2);transform:translateY(-4px)}
+.card-icon{width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;margin-bottom:16px;transition:transform .3s}
+.card:hover .card-icon{transform:scale(1.1)}
+.card h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.card p{font-size:14px;color:var(--muted);line-height:1.7}
+
+/* Pricing */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.price-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:32px 24px;text-align:center;transition:all .3s}
+.price-card:hover{transform:translateY(-4px)}
+.price-card.featured{background:linear-gradient(180deg,rgba(29,185,84,0.15),rgba(29,185,84,0.03));border-color:rgba(29,185,84,0.3)}
+.price-card h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.price-card .price{font-size:42px;font-weight:900;color:var(--green);margin:16px 0}
+.price-card .price span{font-size:14px;color:var(--muted);font-weight:400}
+.price-card .desc{font-size:14px;color:var(--muted);margin-bottom:20px}
+.price-card ul{list-style:none;text-align:right;margin-bottom:24px}
+.price-card ul li{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:14px;color:rgba(255,255,255,0.7)}
+.price-card ul li svg{width:16px;height:16px;color:var(--green);flex-shrink:0}
+.price-btn{width:100%;padding:12px;border-radius:10px;font-size:14px;font-weight:600;transition:all .2s}
+.price-btn.primary{background:var(--green);color:#fff}
+.price-btn.primary:hover{background:var(--green2)}
+.price-btn.secondary{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.1)}
+.price-btn.secondary:hover{background:rgba(255,255,255,0.15)}
+
+/* Problem/Solution */
+.problem-grid,.solution-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.prob-card{background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:12px;padding:16px;display:flex;gap:16px;transition:all .2s}
+.prob-card:hover{border-color:rgba(239,68,68,0.3)}
+.sol-card{background:rgba(29,185,84,0.05);border:1px solid rgba(29,185,84,0.15);border-radius:12px;padding:16px;display:flex;gap:16px;transition:all .2s}
+.sol-card:hover{border-color:rgba(29,185,84,0.3);background:rgba(29,185,84,0.08)}
+.mini-icon{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* Login */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden}
+.login-bg{position:absolute;inset:0;background:radial-gradient(ellipse at center, rgba(29,185,84,0.08) 0%, transparent 70%)}
+.login-box{width:100%;max-width:420px;position:relative;z-index:1}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo .logo-box{margin:0 auto 16px;width:64px;height:64px}
+.login-logo h1{font-size:28px;font-weight:900}
+.login-logo p{color:var(--green);font-size:14px;font-weight:500;margin-top:4px}
+.login-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:20px;padding:28px;backdrop-filter:blur(20px)}
+.login-card h2{text-align:center;font-size:18px;font-weight:700;margin-bottom:4px}
+.login-card .sub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:20px}
+.role-option{width:100%;display:flex;align-items:center;gap:16px;padding:16px;border-radius:12px;border:1px solid var(--border);background:rgba(255,255,255,0.03);margin-bottom:8px;transition:all .2s;cursor:pointer;text-align:right}
+.role-option:hover{border-color:rgba(255,255,255,0.2)}
+.role-option.selected{border-color:var(--green);background:rgba(29,185,84,0.08)}
+.role-option .role-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.role-info{flex:1}
+.role-info .name{font-weight:600;font-size:14px}
+.role-info .desc{font-size:12px;color:var(--muted)}
+.role-check{width:20px;height:20px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center}
+.role-option.selected .role-check{border-color:var(--green);background:var(--green)}
+.role-option.selected .role-check::after{content:'';width:6px;height:10px;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg) translate(-1px,-1px)}
+.login-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:12px 16px;color:#fff;font-size:14px;margin-top:4px;outline:none}
+.login-input:focus{border-color:rgba(29,185,84,0.5)}
+.login-input::placeholder{color:rgba(255,255,255,0.2)}
+.login-label{display:block;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:4px}
+.login-submit{width:100%;background:var(--green);color:#fff;padding:14px;border-radius:12px;font-size:15px;font-weight:700;margin-top:16px;transition:all .2s}
+.login-submit:hover{background:var(--green2)}
+
+/* Dashboard Layout */
+.dashboard{display:flex;min-height:100vh}
+.sidebar{width:280px;background:var(--card);border-left:1px solid var(--border);position:fixed;right:0;top:0;bottom:0;z-index:40;display:flex;flex-direction:column}
+.sidebar-brand{padding:20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.sidebar-user{padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:12px}
+.user-avatar{width:40px;height:40px;border-radius:50%;background:rgba(29,185,84,0.15);display:flex;align-items:center;justify-content:center;color:var(--green);font-weight:700}
+.user-name{font-weight:600;font-size:14px}
+.user-role{font-size:11px;color:var(--green);background:rgba(29,185,84,0.1);padding:2px 8px;border-radius:4px;display:inline-block;margin-top:4px}
+.sidebar-nav{flex:1;padding:12px;overflow-y:auto}
+.sidebar-nav a{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:4px;transition:all .2s;border:1px solid transparent}
+.sidebar-nav a:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.sidebar-nav a.active{color:var(--green);background:rgba(29,185,84,0.1);border-color:rgba(29,185,84,0.2)}
+.sidebar-nav a svg{width:18px;height:18px}
+.sidebar-footer{padding:12px;border-top:1px solid rgba(255,255,255,0.05)}
+.sidebar-footer a,.sidebar-footer button{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;font-size:14px;color:rgba(255,255,255,0.5);width:100%;background:none;border:none;cursor:pointer;transition:all .2s}
+.sidebar-footer a:hover,.sidebar-footer button:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.sidebar-footer button.logout{color:rgba(239,68,68,0.7)}
+.sidebar-footer button.logout:hover{color:var(--red);background:rgba(239,68,68,0.1)}
+
+.main-content{flex:1;margin-right:280px}
+.topbar{position:sticky;top:0;z-index:30;height:64px;background:rgba(10,10,10,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 24px}
+.mobile-menu-btn{display:none;background:none;color:#fff;font-size:24px}
+.dashboard-body{padding:24px;max-width:1400px}
+.page-title h1{font-size:24px;font-weight:800;margin-bottom:4px}
+.page-title p{color:var(--muted);font-size:14px}
+
+/* Dashboard Stats */
+.dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px}
+.dash-stat{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;padding:20px;transition:all .2s}
+.dash-stat:hover{border-color:rgba(255,255,255,0.15)}
+.dash-stat-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.dash-stat .val{font-size:28px;font-weight:900;margin-bottom:4px}
+.dash-stat .lbl{font-size:13px;color:var(--muted)}
+.dash-stat .sub{font-size:12px;color:var(--green);margin-top:6px;display:flex;align-items:center;gap:4px}
+
+/* Tables */
+.dash-table{width:100%;border-collapse:collapse;font-size:14px}
+.dash-table th{text-align:right;padding:14px 16px;color:rgba(255,255,255,0.4);font-weight:500;border-bottom:1px solid var(--border);white-space:nowrap}
+.dash-table td{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,0.03);color:rgba(255,255,255,0.7);vertical-align:middle}
+.dash-table tr:hover td{background:rgba(255,255,255,0.02)}
+.status-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500}
+.status-active{background:rgba(29,185,84,0.15);color:var(--green)}
+.status-inactive{background:rgba(239,68,68,0.15);color:var(--red)}
+.status-trip{background:rgba(59,130,246,0.15);color:var(--blue)}
+.status-maint{background:rgba(245,158,11,0.15);color:var(--amber)}
+.status-valid{background:rgba(29,185,84,0.15);color:var(--green)}
+.status-used{background:rgba(6,182,212,0.15);color:var(--cyan)}
+.status-registered{background:rgba(59,130,246,0.15);color:var(--blue)}
+.status-intransit{background:rgba(245,158,11,0.15);color:var(--amber)}
+.status-completed{background:rgba(29,185,84,0.15);color:var(--green)}
+
+/* Buttons */
+.btn-sm{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;transition:all .2s}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:hover{background:var(--green2)}
+.btn-gray{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.1)}
+.btn-gray:hover{background:rgba(255,255,255,0.15);color:#fff}
+.btn-red{background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.2)}
+.btn-red:hover{background:rgba(239,68,68,0.25)}
+.btn-icon{padding:8px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:rgba(255,255,255,0.5);display:inline-flex;align-items:center;justify-content:center}
+.btn-icon:hover{color:#fff;background:rgba(255,255,255,0.1)}
+
+/* Search */
+.search-wrap{position:relative;max-width:400px;margin-bottom:20px}
+.search-wrap svg{position:absolute;right:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:rgba(255,255,255,0.3)}
+.search-wrap input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:12px 16px 12px 40px;color:#fff;font-size:14px;outline:none}
+.search-wrap input:focus{border-color:rgba(29,185,84,0.4)}
+.search-wrap input::placeholder{color:rgba(255,255,255,0.2)}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);z-index:100;display:none;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding:24px}
+.modal h2{font-size:18px;font-weight:700;margin-bottom:20px}
+.modal .form-group{margin-bottom:16px}
+.modal label{display:block;color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:6px}
+.modal input,.modal select{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:#fff;font-size:14px;outline:none}
+.modal input:focus,.modal select:focus{border-color:rgba(29,185,84,0.4)}
+.modal select option{background:#1a1a1a;color:#fff}
+.modal .modal-actions{display:flex;gap:12px;margin-top:24px}
+.modal .modal-actions button{flex:1;padding:12px;border-radius:10px;font-size:14px;font-weight:600}
+.modal .btn-cancel{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.1)}
+.modal .btn-cancel:hover{background:rgba(255,255,255,0.15)}
+.modal-close{position:absolute;top:16px;left:16px;width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.modal-close:hover{background:rgba(255,255,255,0.1);color:#fff}
+
+/* Progress bars */
+.progress-bar{height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width .5s}
+
+/* QR Code */
+.qr-display{background:#fff;padding:20px;border-radius:16px;display:inline-block}
+
+/* Alerts */
+.alert-item{display:flex;align-items:start;gap:12px;padding:12px;border-radius:10px;background:rgba(255,255,255,0.05);margin-bottom:8px}
+.alert-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0}
+.alert-item p{font-size:14px;color:rgba(255,255,255,0.6)}
+
+/* Footer */
+.landing-footer{border-top:1px solid var(--border;padding:48px 24px;background:#000}
+.footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px}
+.footer-grid h4{font-size:14px;font-weight:700;margin-bottom:16px}
+.footer-grid a{display:block;color:rgba(255,255,255,0.4);font-size:14px;padding:4px 0;transition:all .2s}
+.footer-grid a:hover{color:var(--green)}
+.footer-bottom{max-width:1200px;margin:0 auto;padding-top:24px;margin-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;color:rgba(255,255,255,0.3);font-size:13px}
+
+/* Mobile */
+@media(max-width:1024px){
+  .nav-links,.navbar .nav-cta{display:none}
+  .mobile-toggle{display:block}
+  .hero-content{grid-template-columns:1fr}
+  .hero h1{font-size:40px}
+  .hero-bottom-stats{grid-template-columns:repeat(2,1fr)}
+  .pricing-grid,.problem-grid,.solution-grid,.footer-grid{grid-template-columns:1fr}
+  .sidebar{transform:translateX(100%);transition:transform .3s}
+  .sidebar.open{transform:translateX(0)}
+  .main-content{margin-right:0}
+  .mobile-menu-btn{display:block}
+  .dash-table{min-width:800px}
+  .table-wrap{overflow-x:auto}
+}
+@media(max-width:640px){
+  .hero h1{font-size:32px}
+  .hero-bottom-stats{grid-template-columns:1fr}
+  .section h2{font-size:28px}
+  .price-card .price{font-size:32px}
+}
+
+/* Utility */
+.flex-between{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.mb-4{margin-bottom:16px}
+.mt-4{margin-top:16px}
+.gap-2{gap:8px}
+.gap-3{gap:12px}
+.w-full{width:100%}
+.text-center{text-align:center}
+.text-green{color:var(--green)}
+</style>
+</head>
+<body>
+
+<!-- ========== LANDING PAGE ========== -->
+<div id="page-landing" class="page active">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="logo-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M6 10h.01M18 10h.01"/></svg></div>
+      <div class="brand-text"><span class="brand-name">Nusk Fleet OS</span><span class="brand-sub">نسك فليت</span></div>
+    </div>
+    <div class="nav-links">
+      <a href="#hero" onclick="scrollToSection('hero')">الرئيسية</a>
+      <a href="#problem" onclick="scrollToSection('problem')">المشكلة</a>
+      <a href="#features" onclick="scrollToSection('features')">الميزات</a>
+      <a href="#pricing" onclick="scrollToSection('pricing')">الأسعار</a>
+      <a href="#gov" onclick="scrollToSection('gov')">التكامل</a>
+    </div>
+    <button class="nav-cta" onclick="router.navigate('login')">تسجيل الدخول</button>
+    <button class="mobile-toggle" onclick="toggleMobileMenu()">☰</button>
+  </nav>
+
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div style="position:relative;z-index:2;width:100%">
+      <div class="hero-content">
+        <div>
+          <div class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> حل لوجستي ذكي لموسم الحج - معتمد لوزارة الحج</div>
+          <h1>نسك فليت <span>Nusk Fleet OS</span></h1>
+          <p>منصة <strong style="color:#fff">SaaS متكاملة</strong> لإدارة أسطول النقل الجماعي للحجاج والمعتمرين. نحول الفوضى اللوجستية إلى عمليات رقمية دقيقة.</p>
+          <div class="hero-btns">
+            <button class="btn-primary" onclick="router.navigate('login')">دخول المنصة <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+            <button class="btn-outline" onclick="scrollToSection('pricing')">الباقات والأسعار <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></button>
+          </div>
+        </div>
+        <div class="hero-card">
+          <div class="hero-card-header">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(29,185,84,0.15);display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+              <div><div class="hero-card-title">لوحة تحكم العمليات</div><div class="hero-card-sub">موسم حج 1447</div></div>
+            </div>
+            <span class="badge-live">● مباشر</span>
+          </div>
+          <div class="hero-stats-grid">
+            <div class="stat-mini"><svg viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg><div class="val">12,847</div><div class="lbl">الحافلات النشطة</div></div>
+            <div class="stat-mini"><svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg><div class="val">1.2M</div><div class="lbl">الحجاج اليوم</div></div>
+            <div class="stat-mini"><svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><div class="val">-42%</div><div class="lbl">متوسط التأخير</div></div>
+            <div class="stat-mini"><svg viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/></svg><div class="val">96.8%</div><div class="lbl">معدل الرضا</div></div>
+          </div>
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.05);border-radius:12px;padding:12px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:12px;color:rgba(255,255,255,0.6)">حركة الأسطول</span><span style="font-size:12px;color:var(--green);font-weight:500">مستقر</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:78%;background:linear-gradient(90deg,var(--green),var(--green2))"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-bottom-stats">
+        <div class="stat-card"><div class="num">2.5M+</div><div class="txt">حاج سنوياً</div></div>
+        <div class="stat-card"><div class="num">30,000</div><div class="txt">حافلة وميني باص</div></div>
+        <div class="stat-card"><div class="num">2B+</div><div class="txt">ريال قيمة السوق</div></div>
+        <div class="stat-card"><div class="num">500+</div><div class="txt">شركة ناقلة</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="problem">
+    <div class="section-header"><span class="section-badge">المشكلة والحل</span><h2>عنق الزجاجة: التنسيق اليدوي</h2><p class="desc">إدارة 30,000 حافلة عبر Excel وواتساب تُنتج فوضى لوجستية</p></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+      <div>
+        <h3 style="font-size:18px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px"><span style="color:var(--amber)">⚠</span> التحديات الحالية</h3>
+        <div class="problem-grid" style="display:grid;gap:12px">
+          <div class="prob-card"><div class="mini-icon" style="background:rgba(239,68,68,0.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg></div><div><div style="font-weight:600;margin-bottom:4px">تأخيرات حرجة</div><div style="font-size:13px;color:var(--muted)">حافلات تتأخر في المشاعر بسبب التنسيق اليدوي</div></div></div>
+          <div class="prob-card"><div class="mini-icon" style="background:rgba(239,68,68,0.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div style="font-weight:600;margin-bottom:4px">حجاج ضائعون</div><div style="font-size:13px;color:var(--muted)">صعوبة تحديد مواقع الحجاج وتوزيعهم</div></div></div>
+          <div class="prob-card"><div class="mini-icon" style="background:rgba(239,68,68,0.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><div style="font-weight:600;margin-bottom:4px">تقارير متأخرة</div><div style="font-size:13px;color:var(--muted)">تقارير ورقية تصل الوزارة بعد 48 ساعة</div></div></div>
+          <div class="prob-card"><div class="mini-icon" style="background:rgba(239,68,68,0.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2"/></svg></div><div><div style="font-weight:600;margin-bottom:4px">أسطول مشتت</div><div style="font-size:13px;color:var(--muted)">30,000 مركبة تُدار عبر Excel وواتساب</div></div></div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:18px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px"><span style="color:var(--green)">✓</span> حل نسك فليت</h3>
+        <div class="solution-grid" style="display:grid;gap:12px">
+          <div class="sol-card"><div class="mini-icon" style="background:rgba(29,185,84,0.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></svg></div><div><div style="font-weight:600;margin-bottom:4px">تذكرة رقمية مؤمنة</div><div style="font-size:13px;color:var(--muted)">QR مرتبطة بالهوية الرقمية و"تطبيق نسك"</div></div></div>
+          <div class="sol-card"><div class="mini-icon" style="background:rgba(29,185,84,0.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div><div style="font-weight:600;margin-bottom:4px">لوحة تحكم ذكية</div><div style="font-size:13px;color:var(--muted)">الشركات ترى رحلاتها المطلوبة آنياً</div></div></div>
+          <div class="sol-card"><div class="mini-icon" style="background:rgba(29,185,84,0.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div><div><div style="font-weight:600;margin-bottom:4px">تقارير لحظية</div><div style="font-size:13px;color:var(--muted)">وزارة الحج تحصل على بيانات آنية</div></div></div>
+          <div class="sol-card"><div class="mini-icon" style="background:rgba(29,185,84,0.1)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div><div style="font-weight:600;margin-bottom:4px">أمان سيادي</div><div style="font-size:13px;color:var(--muted)">تكامل آمن مع "منصة الحج الذكي" وأبشر</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="section-header"><span class="section-badge">الميزات الأساسية</span><h2>من Excel وواتساب إلى SaaS متكامل</h2><p class="desc">ستة محركات رئيسية تحول إدارة النقل الجماعي</p></div>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon" style="background:rgba(29,185,84,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg></div><h3>تذكرة نقل رقمية مؤمنة</h3><p>كل حاج يحصل على QR فريد مرتبط بالهوية الرقمية في "تطبيق نسك"</p></div>
+      <div class="card"><div class="card-icon" style="background:rgba(59,130,246,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><h3>تحديد البوابة والمشعر ذكياً</h3><p>توزيع آلي للحجاج على بوابات الصعود بناءً على موقع الإقامة</p></div>
+      <div class="card"><div class="card-icon" style="background:rgba(245,158,11,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><h3>ربط حركة المرور بالوقت الفعلي</h3><p>لوحة تحكم تُحدّث مساراتها تلقائياً بناءً على حالة المرور</p></div>
+      <div class="card"><div class="card-icon" style="background:rgba(168,85,247,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></div><h3>تقارير آنية لوزارة الحج</h3><p>استبدال التقارير الورقية بلوحة بيانات حية لحظياً</p></div>
+      <div class="card"><div class="card-icon" style="background:rgba(6,182,212,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><h3>تطبيق نسك للحاج</h3><p>واجهة بسيطة تُظهر موعد الرحلة، رقم البوابة، اسم السائق</p></div>
+      <div class="card"><div class="card-icon" style="background:rgba(239,68,68,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h3>أمان سيادي متكامل</h3><p>بنية تحتية آمنة معتمدة للاتصال بـ "أبشر" و"المرور"</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="pricing">
+    <div class="section-header"><span class="section-badge">الباقات والأسعار</span><h2>باقات مرنة للجميع</h2><p class="desc">باقات مصممة لتناسب شركات النقل والجهات الحكومية</p></div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <h3>الباقة الأساسية</h3>
+        <div class="price">5,000<span>/ شهر</span></div>
+        <div class="desc">للشركات الصغيرة</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> إدارة 10 حافلات</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> تذاكر رقمية QR</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> تقارير يومية</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> دعم فني</li>
+        </ul>
+        <button class="price-btn secondary" onclick="router.navigate('login')">ابدأ الآن</button>
+      </div>
+      <div class="price-card featured">
+        <h3>الباقة الاحترافية</h3>
+        <div class="price">15,000<span>/ شهر</span></div>
+        <div class="desc">للشركات المتوسطة</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> إدارة 50 حافلة</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> تذاكر رقمية QR</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> تقارير آنية</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> ربط حركة المرور</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> دعم فني 24/7</li>
+        </ul>
+        <button class="price-btn primary" onclick="router.navigate('login')">ابدأ الآن</button>
+      </div>
+      <div class="price-card">
+        <h3>باقة وزارة الحج</h3>
+        <div class="price">مخصص</div>
+        <div class="desc">للجهات الحكومية</div>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> وصول كامل للنظام</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> تقارير سيادية</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> تكامل مع أبشر</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> تكامل مع المرور</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> استضافة محلية آمنة</li>
+        </ul>
+        <button class="price-btn secondary" onclick="router.navigate('login')">تواصل معنا</button>
+      </div>
+    </div>
+    <div style="margin-top:40px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+      <div style="width:64px;height:64px;border-radius:16px;background:rgba(29,185,84,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg></div>
+      <div style="flex:1">
+        <h3 style="font-size:18px;font-weight:700;margin-bottom:4px">الشراكة مع وزارة الحج</h3>
+        <p style="color:var(--muted);font-size:14px">نسك فليت تقدم باقة خاصة لوزارة الحج تشمل وصول كامل للبيانات الآنية، تقارير سيادية، وتكامل كامل مع البنية التحتية الحكومية.</p>
+      </div>
+      <div style="text-align:center;flex-shrink:0">
+        <div style="font-size:32px;font-weight:900;color:var(--green)">2.5M+</div>
+        <div style="font-size:12px;color:var(--muted)">حاج يتم خدمتهم</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="gov">
+    <div class="section-header"><span class="section-badge">الميزة التنافسية</span><h2>لماذا لا يمكن التقليد؟</h2><p class="desc">التكامل مع البنية التحتية الحكومية يتطلب اعتمادات أمنية وسيادية</p></div>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon" style="background:rgba(29,185,84,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><h3>منصة الحج الذكي</h3><span style="font-size:12px;color:var(--amber);background:rgba(245,158,11,0.1);padding:4px 10px;border-radius:6px">مطلوب اعتماد</span></div><p>مزامنة بيانات الحجاج والمواعيد والمشاعر</p></div>
+      <div class="card"><div class="card-icon" style="background:rgba(29,185,84,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><h3>أبشر</h3><span style="font-size:12px;color:var(--amber);background:rgba(245,158,11,0.1);padding:4px 10px;border-radius:6px">مطلوب اعتماد</span></div><p>التحقق من الهوية الرقمية وربط التذاكر</p></div>
+      <div class="card"><div class="card-icon" style="background:rgba(29,185,84,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/></svg></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><h3>المرور السعودي</h3><span style="font-size:12px;color:var(--amber);background:rgba(245,158,11,0.1);padding:4px 10px;border-radius:6px">مطلوب اعتماد</span></div><p>ربط حركة المرور والمسارات في الوقت الفعلي</p></div>
+      <div class="card"><div class="card-icon" style="background:rgba(29,185,84,0.1)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><path d="M6 6h.01M10 6h.01M14 6h.01M2 10v10a2 2 0 002 2h16a2 2 0 002-2V10"/></svg></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><h3>مركز المعلومات الوطني</h3><span style="font-size:12px;color:var(--amber);background:rgba(245,158,11,0.1);padding:4px 10px;border-radius:6px">مطلوب اعتماد</span></div><p>البنية التحتية الأمنية والاستضافة السيادية</p></div>
+    </div>
+    <div style="text-align:center;margin-top:48px">
+      <p style="font-size:24px;font-weight:700;color:rgba(255,255,255,0.8);line-height:1.8">"أنت لا تبني تطبيقاً،<br><span style="color:var(--green)">تبني البوابة الرقمية الرسمية</span><br>لأكبر حدث بشري سنوي في العالم"</p>
+    </div>
+  </section>
+
+  <section style="padding:80px 24px;text-align:center">
+    <span class="section-badge">اطلب العرض التوضيحي</span>
+    <h2 style="font-size:40px;font-weight:900;margin:16px 0">جاهز لعرض المنصة على وزارة الحج؟</h2>
+    <p style="color:var(--muted);font-size:18px;max-width:600px;margin:0 auto 32px">نسك فليت هو الأساس الرقمي لمستقبل النقل الجماعي في الحج والعمرة</p>
+    <button class="btn-primary" style="font-size:18px;padding:16px 40px" onclick="router.navigate('login')">دخول المنصة التجريبي</button>
+    <div style="display:flex;justify-content:center;gap:32px;margin-top:40px;font-size:14px;color:rgba(255,255,255,0.4);flex-wrap:wrap">
+      <span style="display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> منصة سعودية 100%</span>
+      <span style="display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> بنية تحتية آمنة</span>
+      <span style="display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> تحديث آني</span>
+    </div>
+  </section>
+
+  <footer class="landing-footer">
+    <div class="footer-grid">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div class="logo-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div>
+          <div><span style="font-weight:800">Nusk Fleet OS</span><span style="color:var(--green);font-size:10px;display:block">نسك فليت</span></div>
+        </div>
+        <p style="font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;max-width:320px">منصة SaaS متكاملة لإدارة أسطول النقل الجماعي للحجاج والمعتمرين. البوابة الرقمية الرسمية لأكبر حدث بشري سنوي.</p>
+      </div>
+      <div><h4>المنصة</h4><a href="#features">الميزات</a><a href="#pricing">الأسعار</a><a href="#">التذكرة الرقمية</a><a href="#">التقارير</a><a href="#gov">التكامل الحكومي</a></div>
+      <div><h4>التواصل</h4><a href="#">طلب عرض توضيحي</a><a href="#">الشراكات الحكومية</a><a href="#">الدعم الفني</a><a href="#">الأسئلة الشائعة</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Nusk Fleet OS. جميع الحقوق محفوظة.</span>
+      <span style="display:flex;align-items:center;gap:12px"><span>منصة سعودية</span><span style="width:4px;height:4px;background:rgba(255,255,255,0.2);border-radius:50%"></span><span>معتمدة لوزارة الحج</span></span>
+    </div>
+  </footer>
+</div>
+
+<!-- ========== LOGIN PAGE ========== -->
+<div id="page-login" class="page login-page">
+  <div class="login-bg"></div>
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div>
+      <h1>Nusk Fleet OS</h1>
+      <p>نسك فليت - منصة إدارة النقل الجماعي</p>
+    </div>
+    <div class="login-card">
+      <h2 style="text-align:center;margin-bottom:4px">تسجيل الدخول</h2>
+      <p class="sub">اختر نوع الحساب التجريبي</p>
+      <div id="login-roles" style="margin-top:16px"></div>
+      <div id="login-form" style="display:none;margin-top:16px">
+        <label class="login-label">البريد الإلكتروني</label>
+        <input class="login-input" id="login-email" readonly>
+        <label class="login-label" style="margin-top:12px">كلمة المرور</label>
+        <input class="login-input" type="password" id="login-password" placeholder="أي كلمة مرور (تجريبي)" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="login-submit" onclick="doLogin()">دخول المنصة</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:rgba(255,255,255,0.3)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      منصة آمنة معتمدة لوزارة الحج - البيانات مشفرة
+    </div>
+  </div>
+</div>
+
+<!-- ========== DASHBOARD ========== -->
+<div id="page-dashboard" class="page">
+  <div class="dashboard">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div>
+        <div><span style="font-weight:800;font-size:14px">Nusk Fleet OS</span><span style="color:var(--green);font-size:10px;display:block">نسك فليت</span></div>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-avatar" id="dash-avatar">؟</div>
+        <div><div class="user-name" id="dash-name">مستخدم</div><span class="user-role" id="dash-role">زائر</span></div>
+      </div>
+      <nav class="sidebar-nav" id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <a href="#" onclick="router.navigate('landing')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> الموقع الرئيسي</a>
+        <button class="logout" onclick="doLogout()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg> تسجيل الخروج</button>
+      </div>
+    </aside>
+    <div class="main-content">
+      <header class="topbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+          <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(29,185,84,0.1);color:var(--green);padding:6px 12px;border-radius:20px;font-size:12px;border:1px solid rgba(29,185,84,0.2)"><span style="width:6px;height:6px;background:var(--green);border-radius:50%;animation:pulse 2s infinite"></span> النظام مستقر</span>
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.3)">موسم حج 1447 | المرحلة التجريبية</div>
+      </header>
+      <div class="dashboard-body" id="dash-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)closeModal()"></div>
+
+<script>
+
+// ========== DATA STORE ==========
+const DB = {
+  companies: [
+    {id:1,name:"شركة النقل المتحدة",licenseNumber:"LIC-2024-001",contactEmail:"info@united.sa",contactPhone:"+966501234567",managerName:"أحمد السالم",fleetSize:120,isActive:true,pricePerTrip:2500},
+    {id:2,name:"مؤسسة الحرمين للنقل",licenseNumber:"LIC-2024-002",contactEmail:"contact@haramain.sa",contactPhone:"+966502345678",managerName:"خالد العمر",fleetSize:85,isActive:true,pricePerTrip:2200},
+    {id:3,name:"شركة مشاعر النقل",licenseNumber:"LIC-2024-003",contactEmail:"hello@mashaer.sa",contactPhone:"+966503456789",managerName:"فهد الراشد",fleetSize:200,isActive:true,pricePerTrip:2800},
+    {id:4,name:"مجموعة الصفوة الناقلة",licenseNumber:"LIC-2024-004",contactEmail:"info@safwa.sa",contactPhone:"+966504567890",managerName:"سعد المطيري",fleetSize:150,isActive:true,pricePerTrip:3000},
+    {id:5,name:"شركة باصات العمرة",licenseNumber:"LIC-2024-005",contactEmail:"support@omra.sa",contactPhone:"+966505678901",managerName:"ناصر الدوسري",fleetSize:60,isActive:false,pricePerTrip:1800}
+  ],
+  buses: [
+    {id:1,companyId:1,plateNumber:"س ع ا - 1234",busType:"bus",capacity:50,model:"Mercedes Tourismo",year:2024,driverName:"محمد علي",driverPhone:"+966501112222",status:"active",currentLocation:"مكة المكرمة"},
+    {id:2,companyId:1,plateNumber:"س ع ا - 5678",busType:"bus",capacity:50,model:"Mercedes Tourismo",year:2024,driverName:"يوسف أحمد",driverPhone:"+966502223333",status:"on_trip",currentLocation:"عرفات"},
+    {id:3,companyId:2,plateNumber:"ح ر - 9012",busType:"minibus",capacity:30,model:"Toyota Coaster",year:2023,driverName:"عبدالله سليم",driverPhone:"+966503334444",status:"active",currentLocation:"منى"},
+    {id:4,companyId:3,plateNumber:"م ش - 3456",busType:"bus",capacity:55,model:"Volvo 9700",year:2024,driverName:"طارق حمد",driverPhone:"+966504445555",status:"maintenance",currentLocation:"مكة المكرمة"},
+    {id:5,companyId:4,plateNumber:"ص ف - 7890",busType:"van",capacity:15,model:"Hyundai H350",year:2023,driverName:"بندر سعد",driverPhone:"+966505556666",status:"active",currentLocation:"مطار جدة"},
+    {id:6,companyId:1,plateNumber:"س ع ا - 1111",busType:"bus",capacity:50,model:"Mercedes Tourismo",year:2024,driverName:"فواز خالد",driverPhone:"+966506667777",status:"active",currentLocation:"مكة المكرمة"},
+    {id:7,companyId:3,plateNumber:"م ش - 2222",busType:"bus",capacity:55,model:"Volvo 9700",year:2024,driverName:"وليد ناصر",driverPhone:"+966507778888",status:"on_trip",currentLocation:"مزدلفة"},
+    {id:8,companyId:2,plateNumber:"ح ر - 3333",busType:"minibus",capacity:30,model:"Toyota Coaster",year:2023,driverName:"ماجد فهد",driverPhone:"+966508889999",status:"active",currentLocation:"منى"}
+  ],
+  routes: [
+    {id:1,name:"مكة → عرفات",origin:"مكة المكرمة",destination:"عرفات",distanceKm:25,estimatedDurationMin:90,routeType:"hajj",isActive:true,pricePerPilgrim:150},
+    {id:2,name:"مكة → منى",origin:"مكة المكرمة",destination:"منى",distanceKm:8,estimatedDurationMin:45,routeType:"hajj",isActive:true,pricePerPilgrim:80},
+    {id:3,name:"منى → مزدلفة",origin:"منى",destination:"مزدلفة",distanceKm:12,estimatedDurationMin:60,routeType:"hajj",isActive:true,pricePerPilgrim:100},
+    {id:4,name:"المطار → مكة",origin:"مطار الملك عبدالعزيز",destination:"مكة المكرمة",distanceKm:85,estimatedDurationMin:75,routeType:"airport",isActive:true,pricePerPilgrim:200},
+    {id:5,name:"المدينة → مكة",origin:"المدينة المنورة",destination:"مكة المكرمة",distanceKm:450,estimatedDurationMin:300,routeType:"hajj",isActive:true,pricePerPilgrim:350},
+    {id:6,name:"مكة → جدة",origin:"مكة المكرمة",destination:"جدة",distanceKm:70,estimatedDurationMin:60,routeType:"intercity",isActive:true,pricePerPilgrim:120}
+  ],
+  trips: [
+    {id:1,companyId:1,routeId:1,busId:2,scheduledDeparture:"2026-06-05T05:00",scheduledArrival:"2026-06-05T06:30",gateNumber:"12",status:"departed",passengersCount:48,delayMinutes:3,notes:"رحلة عرفات"},
+    {id:2,companyId:3,routeId:3,busId:7,scheduledDeparture:"2026-06-05T18:00",scheduledArrival:"2026-06-05T19:00",gateNumber:"8",status:"scheduled",passengersCount:52,delayMinutes:0,notes:"رحلة مزدلفة"},
+    {id:3,companyId:2,routeId:2,busId:3,scheduledDeparture:"2026-06-05T07:00",scheduledArrival:"2026-06-05T07:45",gateNumber:"5",status:"arrived",passengersCount:28,delayMinutes:5,notes:"رحلة منى"},
+    {id:4,companyId:4,routeId:4,busId:5,scheduledDeparture:"2026-06-05T10:00",scheduledArrival:"2026-06-05T11:15",gateNumber:"A3",status:"departed",passengersCount:14,delayMinutes:12,notes:"استقبال من المطار"},
+    {id:5,companyId:1,routeId:1,busId:6,scheduledDeparture:"2026-06-05T05:30",scheduledArrival:"2026-06-05T07:00",gateNumber:"14",status:"scheduled",passengersCount:0,delayMinutes:0,notes:"احتياطي"}
+  ],
+  pilgrims: [
+    {id:1,passportNumber:"P12345678",name:"عبدالله محمد العلي",nationality:"مصري",phone:"+201001234567",accommodationLocation:"فندق زمزم - مكة",groupSize:1,hajjYear:2026,status:"in_transit"},
+    {id:2,passportNumber:"P87654321",name:"محمد أحمد السالم",nationality:"سوداني",phone:"+249912345678",accommodationLocation:"مجمع النور - مكة",groupSize:2,hajjYear:2026,status:"registered"},
+    {id:3,passportNumber:"P11223344",name:"فاطمة حسن الراشد",nationality:"تركي",phone:"+905551234567",accommodationLocation:"فندق أجياد - مكة",groupSize:1,hajjYear:2026,status:"completed"},
+    {id:4,passportNumber:"P55667788",name:"خالد عمر الفيصل",nationality:"باكستاني",phone:"+923001234567",accommodationLocation:"فندق دار التوحيد - مكة",groupSize:4,hajjYear:2026,status:"registered"},
+    {id:5,passportNumber:"P99887766",name:"يوسف إبراهيم النعيمي",nationality:"قطري",phone:"+97455123456",accommodationLocation:"فندق ساعة مكة - مكة",groupSize:1,hajjYear:2026,status:"in_transit"}
+  ],
+  tickets: [
+    {id:1,ticketNumber:"NSK-2026-00001",tripId:1,pilgrimId:1,seatNumber:"12A",status:"used",scannedAt:"2026-06-05T05:05"},
+    {id:2,ticketNumber:"NSK-2026-00002",tripId:1,pilgrimId:5,seatNumber:"12B",status:"used",scannedAt:"2026-06-05T05:06"},
+    {id:3,ticketNumber:"NSK-2026-00003",tripId:2,pilgrimId:2,seatNumber:"5C",status:"valid",scannedAt:null},
+    {id:4,ticketNumber:"NSK-2026-00004",tripId:3,pilgrimId:3,seatNumber:"8A",status:"used",scannedAt:"2026-06-05T07:02"},
+    {id:5,ticketNumber:"NSK-2026-00005",tripId:4,pilgrimId:4,seatNumber:"3B",status:"valid",scannedAt:null},
+    {id:6,ticketNumber:"NSK-2026-00006",tripId:2,pilgrimId:4,seatNumber:"5D",status:"valid",scannedAt:null}
+  ],
+  nextId: {company:6,bus:9,route:7,trip:6,pilgrim:6,ticket:7}
+};
+
+const demoAccounts = [
+  {role:"admin",label:"أدمن النظام",name:"أحمد المشرف",email:"admin@nuskfleet.sa",desc:"صلاحيات كاملة",color:"#ef4444"},
+  {role:"government",label:"فرد حكومي",name:"خالد الحربي",email:"gov@hajj.gov.sa",desc:"تقارير وبيانات آنية",color:"#3b82f6"},
+  {role:"company",label:"شركة ناقلة",name:"فهد الراشد",email:"manager@mashaer.sa",desc:"إدارة الأسطول والرحلات",color:"#1DB954"}
+];
+
+const navItems = [
+  {label:"لوحة التحكم",path:"dashboard",icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',roles:["admin","company","government"]},
+  {label:"الشركات",path:"companies",icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/></svg>',roles:["admin","government"]},
+  {label:"الأسطول",path:"fleet",icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>',roles:["admin","company","government"]},
+  {label:"الخطوط",path:"routes",icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>',roles:["admin","government"]},
+  {label:"الرحلات",path:"trips",icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>',roles:["admin","company","government"]},
+  {label:"التذاكر",path:"tickets",icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2"/></svg>',roles:["admin","company","government"]},
+  {label:"الحجاج",path:"pilgrims",icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>',roles:["admin","government"]},
+  {label:"التقارير",path:"reports",icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>',roles:["admin","government"]},
+  {label:"الإعدادات",path:"settings",icon:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15 1.65 1.65 0 003 14v-.09a2 2 0 014 0v.09a1.65 1.65 0 001.51 1 1.65 1.65 0 001-1.51V12a2 2 0 014 0v.09"/></svg>',roles:["admin"]}
+];
+
+let currentUser = null;
+let currentPage = 'dashboard';
+let selectedRole = null;
+
+// ========== ROUTER ==========
+const router = {
+  navigate(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    window.scrollTo(0,0);
+    if(page === 'login') renderLogin();
+    if(page === 'dashboard') renderDashboard();
+  }
+};
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth'});
+}
+
+function toggleMobileMenu() {
+  const nav = document.querySelector('.nav-links');
+  nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+  nav.style.position = 'absolute';
+  nav.style.top = '64px';
+  nav.style.right = '0';
+  nav.style.left = '0';
+  nav.style.background = 'rgba(0,0,0,0.95)';
+  nav.style.flexDirection = 'column';
+  nav.style.padding = '16px';
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// ========== AUTH ==========
+function renderLogin() {
+  const container = document.getElementById('login-roles');
+  container.innerHTML = demoAccounts.map(acc => `
+    <div class="role-option ${selectedRole === acc.role ? 'selected' : ''}" onclick="selectRole('${acc.role}')">
+      <div class="role-icon" style="background:${acc.color}20"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${acc.color}" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="role-info"><div class="name">${acc.label}</div><div class="desc">${acc.desc}</div></div>
+      <div class="role-check"></div>
+    </div>
+  `).join('');
+}
+
+function selectRole(role) {
+  selectedRole = role;
+  renderLogin();
+  const acc = demoAccounts.find(a => a.role === role);
+  document.getElementById('login-email').value = acc.email;
+  document.getElementById('login-form').style.display = 'block';
+}
+
+function doLogin() {
+  if(!selectedRole) return;
+  const acc = demoAccounts.find(a => a.role === selectedRole);
+  currentUser = {role: acc.role, name: acc.name};
+  router.navigate('dashboard');
+}
+
+function doLogout() {
+  currentUser = null;
+  selectedRole = null;
+  document.getElementById('login-form').style.display = 'none';
+  router.navigate('landing');
+}
+
+// ========== DASHBOARD ==========
+function renderDashboard() {
+  if(!currentUser) {router.navigate('login'); return;}
+  document.getElementById('dash-name').textContent = currentUser.name;
+  document.getElementById('dash-avatar').textContent = currentUser.name.charAt(0);
+  const roleLabels = {admin:'أدمن', government:'حكومي', company:'شركة ناقلة'};
+  document.getElementById('dash-role').textContent = roleLabels[currentUser.role];
+
+  const nav = document.getElementById('sidebar-nav');
+  nav.innerHTML = navItems
+    .filter(item => item.roles.includes(currentUser.role))
+    .map(item => `<a href="#" class="${currentPage===item.path?'active':''}" onclick="navigateDash('${item.path}')">${item.icon} ${item.label}${currentPage===item.path?'<svg style="margin-right:auto" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>':''}</a>`)
+    .join('');
+
+  const content = document.getElementById('dash-content');
+  content.innerHTML = '';
+
+  switch(currentPage) {
+    case 'dashboard': renderHome(content); break;
+    case 'companies': renderCompanies(content); break;
+    case 'fleet': renderFleet(content); break;
+    case 'routes': renderRoutes(content); break;
+    case 'trips': renderTrips(content); break;
+    case 'tickets': renderTickets(content); break;
+    case 'pilgrims': renderPilgrims(content); break;
+    case 'reports': renderReports(content); break;
+    case 'settings': renderSettings(content); break;
+  }
+}
+
+function navigateDash(page) {
+  currentPage = page;
+  renderDashboard();
+}
+
+// ========== HOME DASHBOARD ==========
+function renderHome(el) {
+  const stats = [
+    {label:'الشركات',value:DB.companies.length,active:DB.companies.filter(c=>c.isActive).length,icon:'building',color:'#1DB954',bg:'rgba(29,185,84,0.1)'},
+    {label:'الحافلات',value:DB.buses.length,active:DB.buses.filter(b=>b.status==='active').length,icon:'bus',color:'#3b82f6',bg:'rgba(59,130,246,0.1)'},
+    {label:'الرحلات',value:DB.trips.length,active:DB.trips.filter(t=>t.status==='departed'||t.status==='arrived').length,icon:'route',color:'#f59e0b',bg:'rgba(245,158,11,0.1)'},
+    {label:'الحجاج',value:DB.pilgrims.length,active:DB.pilgrims.filter(p=>p.status==='registered').length,icon:'users',color:'#a855f7',bg:'rgba(168,85,247,0.1)'},
+    {label:'التذاكر',value:DB.tickets.length,active:DB.tickets.filter(t=>t.status==='valid').length,icon:'ticket',color:'#06b6d4',bg:'rgba(6,182,212,0.1)'}
+  ];
+
+  const busStatus = [
+    {label:'نشطة',value:DB.buses.filter(b=>b.status==='active').length,total:DB.buses.length,color:'#1DB954'},
+    {label:'في رحلة',value:DB.buses.filter(b=>b.status==='on_trip').length,total:DB.buses.length,color:'#3b82f6'},
+    {label:'صيانة',value:DB.buses.filter(b=>b.status==='maintenance').length,total:DB.buses.length,color:'#f59e0b'}
+  ];
+
+  const tripStatus = [
+    {label:'مجدولة',value:DB.trips.filter(t=>t.status==='scheduled').length,total:DB.trips.length,color:'#3b82f6'},
+    {label:'مغادرة',value:DB.trips.filter(t=>t.status==='departed').length,total:DB.trips.length,color:'#1DB954'},
+    {label:'وصلت',value:DB.trips.filter(t=>t.status==='arrived').length,total:DB.trips.length,color:'#a855f7'},
+    {label:'متأخرة',value:DB.trips.filter(t=>t.status==='delayed').length,total:DB.trips.length,color:'#ef4444'}
+  ];
+
+  el.innerHTML = `
+    <div class="page-title mb-4"><h1>لوحة التحكم</h1><p>نظرة شاملة على عمليات النقل الجماعي - موسم حج 1447</p></div>
+    <div class="dash-stats">
+      ${stats.map(s=>`
+        <div class="dash-stat">
+          <div class="dash-stat-icon" style="background:${s.bg}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${s.color}" stroke-width="2">${getIconPath(s.icon)}</svg></div>
+          <div class="val">${s.value}</div><div class="lbl">${s.label}</div>
+          <div class="sub"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> ${s.active} نشط</div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+      ${renderChartCard('حالة الأسطول', busStatus)}
+      ${renderChartCard('حالة الرحلات', tripStatus)}
+    </div>
+    <div class="card"><div style="padding:20px">
+      <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0zM12 9v4M12 17h.01"/></svg> تنبيهات العمليات</h3>
+      ${['3 رحلات متأخرة في خط مكة → عرفات - يتم التنسيق مع الشركات','12 حافلة جديدة تمت إضافتها للأسطول اليوم','2,847 تذكرة تم فحص QR بنجاح اليوم','متوسط التأخير اليوم: 4.2 دقيقة (أفضل من الأسبوع الماضي بـ 42%)'].map((t,i)=>`
+        <div class="alert-item"><div class="alert-dot" style="background:${['#f59e0b','#1DB954','#3b82f6','#3b82f6'][i]}"></div><p>${t}</p></div>
+      `).join('')}
+    </div></div>
+  `;
+}
+
+function renderChartCard(title, data) {
+  return `<div class="card"><div style="padding:20px">
+    <h3 style="font-size:16px;font-weight:700;margin-bottom:16px">${title}</h3>
+    ${data.map(d=>`
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:rgba(255,255,255,0.6)">${d.label}</span><span style="color:rgba(255,255,255,0.4)">${d.value} / ${d.total}</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${d.total>0?(d.value/d.total)*100:0}%;background:${d.color}"></div></div>
+      </div>
+    `).join('')}
+  </div></div>`;
+}
+
+function getIconPath(name) {
+  const icons = {
+    building: '<path d="M3 21h18M5 21V7l8-4 8 4v14M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"/>',
+    bus: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/>',
+    route: '<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>',
+    users: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>',
+    ticket: '<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2"/>'
+  };
+  return icons[name] || '';
+}
+
+// ========== COMPANIES CRUD ==========
+function renderCompanies(el, search='') {
+  let data = DB.companies;
+  if(search) data = data.filter(c=>c.name.includes(search)||c.licenseNumber.includes(search));
+
+  el.innerHTML = `
+    <div class="flex-between mb-4">
+      <div class="page-title"><h1>الشركات الناقلة</h1><p>${DB.companies.length} شركة مرخصة</p></div>
+      <button class="btn-sm btn-green" onclick="openCompanyModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> إضافة شركة</button>
+    </div>
+    <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="البحث..." oninput="renderCompanies(document.getElementById('dash-content'),this.value)"></div>
+    <div class="card-grid">
+      ${data.map(c=>`
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(29,185,84,0.1);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M3 21h18M5 21V7l8-4 8 4v14"/></svg></div>
+            <div style="flex:1"><h3>${c.name}</h3><div style="font-size:12px;color:var(--muted)">ترخيص: ${c.licenseNumber}</div></div>
+            <span class="status-badge ${c.isActive?'status-active':'status-inactive'}">${c.isActive?'نشطة':'معطلة'}</span>
+          </div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4);display:flex;flex-wrap:wrap;gap:12px">
+            <span>${c.fleetSize} مركبة</span><span>${c.pricePerTrip.toLocaleString()} ر.س/رحلة</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px">
+            <button class="btn-icon" onclick="editCompany(${c.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            <button class="btn-icon" style="border-color:rgba(239,68,68,0.2);color:rgba(239,68,68,0.5)" onclick="deleteCompany(${c.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function openCompanyModal(company=null) {
+  const isEdit = !!company;
+  showModal(`
+    <h2>${isEdit?'تعديل شركة':'إضافة شركة'}</h2>
+    <div class="form-group"><label>اسم الشركة *</label><input id="c-name" value="${company?company.name:''}"></div>
+    <div class="form-group"><label>رقم الترخيص *</label><input id="c-lic" value="${company?company.licenseNumber:''}"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group"><label>البريد</label><input id="c-email" value="${company?company.contactEmail:''}"></div>
+      <div class="form-group"><label>الهاتف</label><input id="c-phone" value="${company?company.contactPhone:''}"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group"><label>المدير</label><input id="c-manager" value="${company?company.managerName:''}"></div>
+      <div class="form-group"><label>المركبات</label><input type="number" id="c-fleet" value="${company?company.fleetSize:''}"></div>
+    </div>
+    <div class="form-group"><label>سعر الرحلة (ريال)</label><input type="number" id="c-price" value="${company?company.pricePerTrip:''}"></div>
+    <div class="modal-actions">
+      <button class="btn-green" onclick="saveCompany(${company?company.id:'null'})">${isEdit?'حفظ':'إضافة'}</button>
+      <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+    </div>
+  `);
+}
+
+function saveCompany(id) {
+  const data = {
+    name: document.getElementById('c-name').value,
+    licenseNumber: document.getElementById('c-lic').value,
+    contactEmail: document.getElementById('c-email').value,
+    contactPhone: document.getElementById('c-phone').value,
+    managerName: document.getElementById('c-manager').value,
+    fleetSize: parseInt(document.getElementById('c-fleet').value)||0,
+    pricePerTrip: parseInt(document.getElementById('c-price').value)||0,
+    isActive: true
+  };
+  if(!data.name||!data.licenseNumber) return alert('املأ الحقول المطلوبة');
+  if(id) {
+    const idx = DB.companies.findIndex(c=>c.id===id);
+    DB.companies[idx] = {...DB.companies[idx],...data};
+  } else {
+    DB.companies.unshift({...data,id:DB.nextId.company++});
+  }
+  closeModal(); renderDashboard();
+}
+
+function editCompany(id) {
+  openCompanyModal(DB.companies.find(c=>c.id===id));
+}
+
+function deleteCompany(id) {
+  if(!confirm('حذف الشركة نهائياً؟')) return;
+  DB.companies = DB.companies.filter(c=>c.id!==id);
+  renderDashboard();
+}
+
+// ========== FLEET CRUD ==========
+function renderFleet(el, search='') {
+  let data = DB.buses;
+  if(search) data = data.filter(b=>b.plateNumber.includes(search)||b.driverName?.includes(search));
+  const statusMap = {active:{l:'نشطة',c:'status-active'},on_trip:{l:'في رحلة',c:'status-trip'},maintenance:{l:'صيانة',c:'status-maint'},inactive:{l:'غير نشطة',c:'status-inactive'}};
+
+  el.innerHTML = `
+    <div class="flex-between mb-4">
+      <div class="page-title"><h1>إدارة الأسطول</h1><p>${DB.buses.length} حافلة ومركبة</p></div>
+      <button class="btn-sm btn-green" onclick="openBusModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> إضافة حافلة</button>
+    </div>
+    <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="البحث..." oninput="renderFleet(document.getElementById('dash-content'),this.value)"></div>
+    <div class="card-grid">
+      ${data.map(b=>{
+        const s = statusMap[b.status]||statusMap.inactive;
+        const cname = DB.companies.find(c=>c.id===b.companyId)?.name||'غير معروف';
+        return `<div class="card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2"/></svg></div>
+            <div style="flex:1"><h3>${b.plateNumber}</h3><div style="font-size:12px;color:var(--muted)">${cname}</div></div>
+            <span class="status-badge ${s.c}">${s.l}</span>
+          </div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4);display:flex;flex-wrap:wrap;gap:12px">
+            <span>${b.busType==='bus'?'حافلة':b.busType==='minibus'?'ميني باص':'فان'} (${b.capacity} مقعد)</span>
+            <span>${b.driverName||'-'}</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px">
+            <button class="btn-icon" onclick="editBus(${b.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            <button class="btn-icon" style="border-color:rgba(239,68,68,0.2);color:rgba(239,68,68,0.5)" onclick="deleteBus(${b.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function openBusModal(bus=null) {
+  const isEdit = !!bus;
+  const companies = DB.companies.filter(c=>c.isActive);
+  showModal(`
+    <h2>${isEdit?'تعديل حافلة':'إضافة حافلة'}</h2>
+    <div class="form-group"><label>الشركة *</label><select id="b-company">${companies.map(c=>`<option value="${c.id}" ${bus&&bus.companyId===c.id?'selected':''}>${c.name}</option>`).join('')}</select></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group"><label>اللوحة *</label><input id="b-plate" value="${bus?bus.plateNumber:''}"></div>
+      <div class="form-group"><label>السعة</label><input type="number" id="b-cap" value="${bus?bus.capacity:''}"></div>
+    </div>
+    <div class="form-group"><label>السائق</label><input id="b-driver" value="${bus?bus.driverName||'':''}"></div>
+    <div class="form-group"><label>الموقع</label><input id="b-loc" value="${bus?bus.currentLocation||'':''}"></div>
+    <div class="modal-actions">
+      <button class="btn-green" onclick="saveBus(${bus?bus.id:'null'})">${isEdit?'حفظ':'إضافة'}</button>
+      <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+    </div>
+  `);
+}
+
+function saveBus(id) {
+  const data = {
+    companyId: parseInt(document.getElementById('b-company').value),
+    plateNumber: document.getElementById('b-plate').value,
+    capacity: parseInt(document.getElementById('b-cap').value)||50,
+    driverName: document.getElementById('b-driver').value,
+    currentLocation: document.getElementById('b-loc').value,
+    busType: 'bus', model: 'Bus', year: 2024, driverPhone: '', status: 'active'
+  };
+  if(!data.plateNumber) return alert('أدخل رقم اللوحة');
+  if(id) {
+    const idx = DB.buses.findIndex(b=>b.id===id);
+    DB.buses[idx] = {...DB.buses[idx],...data};
+  } else {
+    DB.buses.unshift({...data,id:DB.nextId.bus++});
+  }
+  closeModal(); renderDashboard();
+}
+
+function editBus(id) { openBusModal(DB.buses.find(b=>b.id===id)); }
+function deleteBus(id) { if(!confirm('حذف؟'))return; DB.buses=DB.buses.filter(b=>b.id!==id); renderDashboard(); }
+
+// ========== ROUTES CRUD ==========
+function renderRoutes(el, search='') {
+  let data = DB.routes;
+  if(search) data = data.filter(r=>r.name.includes(search));
+  const typeMap = {hajj:'حج',umrah:'عمرة',airport:'مطار',intercity:'بين المدن'};
+
+  el.innerHTML = `
+    <div class="flex-between mb-4">
+      <div class="page-title"><h1>الخطوط والمسارات</h1><p>${DB.routes.length} خط نقل</p></div>
+      <button class="btn-sm btn-green" onclick="openRouteModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> إضافة خط</button>
+    </div>
+    <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="البحث..." oninput="renderRoutes(document.getElementById('dash-content'),this.value)"></div>
+    <div class="card-grid">
+      ${data.map(r=>`
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(245,158,11,0.1);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+            <div style="flex:1"><h3>${r.name}</h3><div style="font-size:12px;color:var(--muted)">${r.origin} → ${r.destination}</div></div>
+            <span class="status-badge ${r.isActive?'status-active':'status-inactive'}">${r.isActive?'نشط':'معطل'}</span>
+          </div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4);display:flex;flex-wrap:wrap;gap:12px">
+            <span>${r.distanceKm} كم</span><span>${Math.floor(r.estimatedDurationMin/60)}س ${r.estimatedDurationMin%60}د</span><span>${typeMap[r.routeType]}</span><span>${r.pricePerPilgrim} ر.س/حاج</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px">
+            <button class="btn-icon" onclick="editRoute(${r.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            <button class="btn-icon" style="border-color:rgba(239,68,68,0.2);color:rgba(239,68,68,0.5)" onclick="deleteRoute(${r.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function openRouteModal(route=null) {
+  const isEdit = !!route;
+  showModal(`
+    <h2>${isEdit?'تعديل خط':'إضافة خط'}</h2>
+    <div class="form-group"><label>الاسم *</label><input id="r-name" value="${route?route.name:''}"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group"><label>من *</label><input id="r-from" value="${route?route.origin:''}"></div>
+      <div class="form-group"><label>إلى *</label><input id="r-to" value="${route?route.destination:''}"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group"><label>المسافة (كم)</label><input type="number" id="r-dist" value="${route?route.distanceKm:''}"></div>
+      <div class="form-group"><label>المدة (دقيقة)</label><input type="number" id="r-time" value="${route?route.estimatedDurationMin:''}"></div>
+    </div>
+    <div class="form-group"><label>السعر/حاج</label><input type="number" id="r-price" value="${route?route.pricePerPilgrim:''}"></div>
+    <div class="modal-actions">
+      <button class="btn-green" onclick="saveRoute(${route?route.id:'null'})">${isEdit?'حفظ':'إضافة'}</button>
+      <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+    </div>
+  `);
+}
+
+function saveRoute(id) {
+  const data = {
+    name: document.getElementById('r-name').value,
+    origin: document.getElementById('r-from').value,
+    destination: document.getElementById('r-to').value,
+    distanceKm: parseInt(document.getElementById('r-dist').value)||0,
+    estimatedDurationMin: parseInt(document.getElementById('r-time').value)||0,
+    pricePerPilgrim: parseInt(document.getElementById('r-price').value)||0,
+    routeType: 'hajj', isActive: true
+  };
+  if(!data.name||!data.origin||!data.destination) return alert('املأ الحقول المطلوبة');
+  if(id) {
+    const idx = DB.routes.findIndex(r=>r.id===id);
+    DB.routes[idx] = {...DB.routes[idx],...data};
+  } else {
+    DB.routes.unshift({...data,id:DB.nextId.route++});
+  }
+  closeModal(); renderDashboard();
+}
+
+function editRoute(id) { openRouteModal(DB.routes.find(r=>r.id===id)); }
+function deleteRoute(id) { if(!confirm('حذف؟'))return; DB.routes=DB.routes.filter(r=>r.id!==id); renderDashboard(); }
+
+// ========== TRIPS CRUD ==========
+function renderTrips(el, search='') {
+  let data = DB.trips;
+  if(search) data = data.filter(t=>getRouteName(t.routeId).includes(search));
+  const statusLabels = {scheduled:'مجدولة',boarding:'صعود',departed:'مغادرة',arrived:'وصلت',delayed:'متأخرة',cancelled:'ملغاة'};
+  const statusColors = {scheduled:'status-registered',boarding:'status-trip',departed:'status-maint',arrived:'status-active',delayed:'status-inactive',cancelled:'status-inactive'};
+
+  el.innerHTML = `
+    <div class="flex-between mb-4">
+      <div class="page-title"><h1>الرحلات</h1><p>${DB.trips.length} رحلة</p></div>
+      <button class="btn-sm btn-green" onclick="openTripModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> إضافة رحلة</button>
+    </div>
+    <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="البحث..." oninput="renderTrips(document.getElementById('dash-content'),this.value)"></div>
+    <div class="card-grid">
+      ${data.map(t=>{
+        const rname = getRouteName(t.routeId);
+        const cname = DB.companies.find(c=>c.id===t.companyId)?.name||'غير معروف';
+        return `<div class="card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(168,85,247,0.1);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M6 18v2M18 18v2"/></svg></div>
+            <div style="flex:1"><h3>${rname}</h3><div style="font-size:12px;color:var(--muted)">${cname}</div></div>
+            <span class="status-badge ${statusColors[t.status]}">${statusLabels[t.status]}</span>
+          </div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4);display:flex;flex-wrap:wrap;gap:12px">
+            <span>بوابة ${t.gateNumber}</span><span>${t.passengersCount} راكب</span><span>${t.delayMinutes>0?'تأخير: '+t.delayMinutes+' د':'في الموعد'}</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px">
+            <button class="btn-icon" onclick="editTrip(${t.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            <button class="btn-icon" style="border-color:rgba(239,68,68,0.2);color:rgba(239,68,68,0.5)" onclick="deleteTrip(${t.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function openTripModal(trip=null) {
+  const isEdit = !!trip;
+  const companies = DB.companies.filter(c=>c.isActive);
+  const routes = DB.routes.filter(r=>r.isActive);
+  const buses = DB.buses.filter(b=>b.status==='active');
+  showModal(`
+    <h2>${isEdit?'تعديل رحلة':'إضافة رحلة'}</h2>
+    <div class="form-group"><label>الشركة *</label><select id="t-company">${companies.map(c=>`<option value="${c.id}" ${trip&&trip.companyId===c.id?'selected':''}>${c.name}</option>`).join('')}</select></div>
+    <div class="form-group"><label>الخط *</label><select id="t-route">${routes.map(r=>`<option value="${r.id}" ${trip&&trip.routeId===r.id?'selected':''}>${r.name}</option>`).join('')}</select></div>
+    <div class="form-group"><label>الحافلة *</label><select id="t-bus">${buses.map(b=>`<option value="${b.id}" ${trip&&trip.busId===b.id?'selected':''}>${b.plateNumber} - ${b.driverName}</option>`).join('')}</select></div>
+    <div class="form-group"><label>البوابة</label><input id="t-gate" value="${trip?trip.gateNumber:''}"></div>
+    <div class="form-group"><label>الركاب</label><input type="number" id="t-pax" value="${trip?trip.passengersCount:''}"></div>
+    <div class="modal-actions">
+      <button class="btn-green" onclick="saveTrip(${trip?trip.id:'null'})">${isEdit?'حفظ':'إضافة'}</button>
+      <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+    </div>
+  `);
+}
+
+function saveTrip(id) {
+  const data = {
+    companyId: parseInt(document.getElementById('t-company').value),
+    routeId: parseInt(document.getElementById('t-route').value),
+    busId: parseInt(document.getElementById('t-bus').value),
+    gateNumber: document.getElementById('t-gate').value,
+    passengersCount: parseInt(document.getElementById('t-pax').value)||0,
+    scheduledDeparture: '2026-06-05T05:00', scheduledArrival: '2026-06-05T07:00',
+    status: 'scheduled', delayMinutes: 0, notes: ''
+  };
+  if(id) {
+    const idx = DB.trips.findIndex(t=>t.id===id);
+    DB.trips[idx] = {...DB.trips[idx],...data};
+  } else {
+    DB.trips.unshift({...data,id:DB.nextId.trip++});
+  }
+  closeModal(); renderDashboard();
+}
+
+function editTrip(id) { openTripModal(DB.trips.find(t=>t.id===id)); }
+function deleteTrip(id) { if(!confirm('حذف؟'))return; DB.trips=DB.trips.filter(t=>t.id!==id); renderDashboard(); }
+
+// ========== TICKETS CRUD ==========
+function renderTickets(el, search='') {
+  let data = DB.tickets;
+  if(search) data = data.filter(t=>t.ticketNumber.includes(search)||getPilgrimName(t.pilgrimId).includes(search));
+  const statusLabels = {valid:'صالحة',used:'مستخدمة',expired:'منتهية',cancelled:'ملغاة'};
+  const statusColors = {valid:'status-valid',used:'status-used',expired:'status-maint',cancelled:'status-inactive'};
+
+  el.innerHTML = `
+    <div class="flex-between mb-4">
+      <div class="page-title"><h1>التذاكر الرقمية</h1><p>${DB.tickets.length} تذكرة مؤمنة</p></div>
+      <button class="btn-sm btn-green" onclick="openTicketModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> إصدار تذكرة</button>
+    </div>
+    <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="البحث..." oninput="renderTickets(document.getElementById('dash-content'),this.value)"></div>
+    <div class="card-grid">
+      ${data.map(t=>{
+        const pname = getPilgrimName(t.pilgrimId);
+        return `<div class="card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(6,182,212,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer" onclick="showQR(${t.id})"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg></div>
+            <div style="flex:1"><h3>${t.ticketNumber}</h3><div style="font-size:12px;color:var(--muted)">${pname}</div></div>
+            <span class="status-badge ${statusColors[t.status]}">${statusLabels[t.status]}</span>
+          </div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4);display:flex;flex-wrap:wrap;gap:12px">
+            <span>رحلة #${t.tripId}</span><span>المقعد: ${t.seatNumber}</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px">
+            ${t.status==='valid'?`<button class="btn-sm btn-green" onclick="scanTicket(${t.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> فحص</button>`:''}
+            <button class="btn-icon" onclick="showQR(${t.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button class="btn-icon" style="border-color:rgba(239,68,68,0.2);color:rgba(239,68,68,0.5)" onclick="deleteTicket(${t.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function openTicketModal() {
+  const trips = DB.trips;
+  const pilgrims = DB.pilgrims;
+  showModal(`
+    <h2>إصدار تذكرة جديدة</h2>
+    <div class="form-group"><label>الرحلة *</label><select id="tk-trip">${trips.map(t=>`<option value="${t.id}">رحلة #${t.id} - بوابة ${t.gateNumber}</option>`).join('')}</select></div>
+    <div class="form-group"><label>الحاج *</label><select id="tk-pilgrim">${pilgrims.map(p=>`<option value="${p.id}">${p.name} - ${p.passportNumber}</option>`).join('')}</select></div>
+    <div class="form-group"><label>المقعد</label><input id="tk-seat" placeholder="مثال: 12A"></div>
+    <div class="modal-actions">
+      <button class="btn-green" onclick="saveTicket()">إصدار + QR</button>
+      <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+    </div>
+  `);
+}
+
+function saveTicket() {
+  const tripId = parseInt(document.getElementById('tk-trip').value);
+  const pilgrimId = parseInt(document.getElementById('tk-pilgrim').value);
+  const seat = document.getElementById('tk-seat').value || '1A';
+  const num = 'NSK-2026-' + String(DB.nextId.ticket++).padStart(5,'0');
+  DB.tickets.unshift({id:DB.nextId.ticket-1,ticketNumber:num,tripId,pilgrimId,seatNumber:seat,status:'valid',scannedAt:null});
+  closeModal(); renderDashboard();
+}
+
+function scanTicket(id) {
+  const t = DB.tickets.find(x=>x.id===id);
+  if(t) { t.status='used'; t.scannedAt=new Date().toISOString(); }
+  renderDashboard();
+}
+
+function showQR(id) {
+  const t = DB.tickets.find(x=>x.id===id);
+  const p = DB.pilgrims.find(x=>x.id===t.pilgrimId);
+  const data = `TICKET:${t.ticketNumber}|PILGRIM:${p.name}|TRIP:${t.tripId}`;
+  showModal(`
+    <h2 style="text-align:center">التذكرة الرقمية</h2>
+    <div style="text-align:center;padding:20px">
+      <div style="background:#fff;padding:20px;border-radius:16px;display:inline-block">
+        <svg viewBox="0 0 200 200" width="180" height="180">${generateQR(data)}</svg>
+      </div>
+      <div style="margin-top:16px">
+        <div style="color:var(--green);font-weight:800;font-size:20px">${t.ticketNumber}</div>
+        <div style="color:var(--muted);font-size:14px">${p.name}</div>
+        <div style="color:var(--muted);font-size:12px">المقعد: ${t.seatNumber}</div>
+      </div>
+      ${t.status==='valid'?`<button class="btn-green" style="margin-top:16px" onclick="scanTicket(${t.id});closeModal();">تأكيد الفحص</button>`:''}
+    </div>
+  `);
+}
+
+function deleteTicket(id) { if(!confirm('حذف؟'))return; DB.tickets=DB.tickets.filter(t=>t.id!==id); renderDashboard(); }
+
+// Simple QR generator (placeholder blocks)
+function generateQR(text) {
+  let svg = '';
+  const size = 200;
+  const cells = 25;
+  const cellSize = size / cells;
+  for(let r=0;r<cells;r++){
+    for(let c=0;c<cells;c++){
+      if(Math.random()>0.5) svg += `<rect x="${c*cellSize}" y="${r*cellSize}" width="${cellSize}" height="${cellSize}" fill="#000"/>`;
+    }
+  }
+  // Position detection patterns
+  svg += '<rect x="0" y="0" width="50" height="50" fill="none" stroke="#000" stroke-width="6"/><rect x="12" y="12" width="26" height="26" fill="#000"/>';
+  svg += '<rect x="150" y="0" width="50" height="50" fill="none" stroke="#000" stroke-width="6"/><rect x="162" y="12" width="26" height="26" fill="#000"/>';
+  svg += '<rect x="0" y="150" width="50" height="50" fill="none" stroke="#000" stroke-width="6"/><rect x="12" y="162" width="26" height="26" fill="#000"/>';
+  return svg;
+}
+
+// ========== PILGRIMS CRUD ==========
+function renderPilgrims(el, search='') {
+  let data = DB.pilgrims;
+  if(search) data = data.filter(p=>p.name.includes(search)||p.passportNumber.includes(search));
+  const statusLabels = {registered:'مسجل',in_transit:'في النقل',completed:'مكتمل',cancelled:'ملغى'};
+  const statusColors = {registered:'status-registered',in_transit:'status-intransit',completed:'status-completed',cancelled:'status-inactive'};
+
+  el.innerHTML = `
+    <div class="flex-between mb-4">
+      <div class="page-title"><h1>الحجاج والمعتمرين</h1><p>${DB.pilgrims.length} حاج مسجل</p></div>
+      <button class="btn-sm btn-green" onclick="openPilgrimModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> إضافة حاج</button>
+    </div>
+    <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" placeholder="البحث..." oninput="renderPilgrims(document.getElementById('dash-content'),this.value)"></div>
+    <div class="card-grid">
+      ${data.map(p=>`
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="width:48px;height:48px;border-radius:12px;background:rgba(168,85,247,0.1);display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg></div>
+            <div style="flex:1"><h3>${p.name}</h3><div style="font-size:12px;color:var(--muted)">جواز: ${p.passportNumber}</div></div>
+            <span class="status-badge ${statusColors[p.status]}">${statusLabels[p.status]}</span>
+          </div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4);display:flex;flex-wrap:wrap;gap:12px">
+            <span>${p.nationality}</span><span>${p.accommodationLocation||'-'}</span><span>موسم: ${p.hajjYear}</span>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px">
+            <button class="btn-icon" onclick="editPilgrim(${p.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+            <button class="btn-icon" style="border-color:rgba(239,68,68,0.2);color:rgba(239,68,68,0.5)" onclick="deletePilgrim(${p.id})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function openPilgrimModal(pilgrim=null) {
+  const isEdit = !!pilgrim;
+  showModal(`
+    <h2>${isEdit?'تعديل':'إضافة حاج'}</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group"><label>الاسم *</label><input id="p-name" value="${pilgrim?pilgrim.name:''}"></div>
+      <div class="form-group"><label>الجواز *</label><input id="p-passport" value="${pilgrim?pilgrim.passportNumber:''}"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group"><label>الجنسية</label><input id="p-nat" value="${pilgrim?pilgrim.nationality:''}"></div>
+      <div class="form-group"><label>الهاتف</label><input id="p-phone" value="${pilgrim?pilgrim.phone:''}"></div>
+    </div>
+    <div class="form-group"><label>مكان الإقامة</label><input id="p-loc" value="${pilgrim?pilgrim.accommodationLocation:''}"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="form-group"><label>المجموعة</label><input type="number" id="p-group" value="${pilgrim?pilgrim.groupSize:'1'}"></div>
+      <div class="form-group"><label>الموسم</label><input type="number" id="p-year" value="${pilgrim?pilgrim.hajjYear:'2026'}"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-green" onclick="savePilgrim(${pilgrim?pilgrim.id:'null'})">${isEdit?'حفظ':'إضافة'}</button>
+      <button class="btn-cancel" onclick="closeModal()">إلغاء</button>
+    </div>
+  `);
+}
+
+function savePilgrim(id) {
+  const data = {
+    name: document.getElementById('p-name').value,
+    passportNumber: document.getElementById('p-passport').value,
+    nationality: document.getElementById('p-nat').value,
+    phone: document.getElementById('p-phone').value,
+    accommodationLocation: document.getElementById('p-loc').value,
+    groupSize: parseInt(document.getElementById('p-group').value)||1,
+    hajjYear: parseInt(document.getElementById('p-year').value)||2026,
+    status: 'registered'
+  };
+  if(!data.name||!data.passportNumber) return alert('املأ الحقول المطلوبة');
+  if(id) {
+    const idx = DB.pilgrims.findIndex(p=>p.id===id);
+    DB.pilgrims[idx] = {...DB.pilgrims[idx],...data};
+  } else {
+    DB.pilgrims.unshift({...data,id:DB.nextId.pilgrim++});
+  }
+  closeModal(); renderDashboard();
+}
+
+function editPilgrim(id) { openPilgrimModal(DB.pilgrims.find(p=>p.id===id)); }
+function deletePilgrim(id) { if(!confirm('حذف؟'))return; DB.pilgrims=DB.pilgrims.filter(p=>p.id!==id); renderDashboard(); }
+
+// ========== REPORTS ==========
+function renderReports(el) {
+  const totalRev = DB.companies.reduce((s,c)=>s+(c.isActive?c.pricePerTrip*c.fleetSize*10:0),0);
+  const totalPax = DB.pilgrims.reduce((s,p)=>s+p.groupSize,0);
+  const avgDelay = DB.trips.length>0?(DB.trips.reduce((s,t)=>s+t.delayMinutes,0)/DB.trips.length).toFixed(1):'0';
+
+  const reports = [
+    {title:'حركة الأسطول',desc:`${DB.buses.length} إجمالي | ${DB.buses.filter(b=>b.status==='active').length} نشطة`,icon:'bus',color:'#3b82f6'},
+    {title:'الرحلات اليومية',desc:`${DB.trips.length} إجمالي | ${DB.trips.filter(t=>t.status==='departed').length} مغادرة`,icon:'route',color:'#f59e0b'},
+    {title:'الحجاج الموزعين',desc:`${DB.pilgrims.length} إجمالي | ${DB.pilgrims.filter(p=>p.status==='registered').length} مسجل`,icon:'users',color:'#a855f7'},
+    {title:'التذاكر المؤمنة',desc:`${DB.tickets.length} إجمالي | ${DB.tickets.filter(t=>t.status==='valid').length} صالحة`,icon:'ticket',color:'#06b6d4'},
+    {title:'الشركات الناقلة',desc:`${DB.companies.length} إجمالي | ${DB.companies.filter(c=>c.isActive).length} نشطة`,icon:'building',color:'#1DB954'},
+    {title:'الأداء والتأخير',desc:`متوسط التأخير: ${avgDelay} دقيقة`,icon:'clock',color:'#ef4444'}
+  ];
+
+  el.innerHTML = `
+    <div class="page-title mb-4"><h1>التقارير والإحصائيات</h1><p>تقارير آنية لوزارة الحج</p></div>
+    <div class="card" style="margin-bottom:24px"><div style="padding:24px">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
+        <div style="text-align:center"><div style="font-size:32px;font-weight:900;color:var(--green)">${totalRev.toLocaleString()}</div><div style="font-size:13px;color:var(--muted);margin-top:4px">إيرادات تقديرية (ر.س)</div></div>
+        <div style="text-align:center"><div style="font-size:32px;font-weight:900;color:var(--blue)">${totalPax.toLocaleString()}</div><div style="font-size:13px;color:var(--muted);margin-top:4px">إجمالي الحجاج</div></div>
+        <div style="text-align:center"><div style="font-size:32px;font-weight:900;color:var(--amber)">${avgDelay}</div><div style="font-size:13px;color:var(--muted);margin-top:4px">متوسط التأخير (د)</div></div>
+        <div style="text-align:center"><div style="font-size:32px;font-weight:900;color:var(--purple)">${DB.companies.filter(c=>c.isActive).length}</div><div style="font-size:13px;color:var(--muted);margin-top:4px">شركات نشطة</div></div>
+      </div>
+    </div></div>
+    <div class="card-grid">
+      ${reports.map(r=>`
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <div style="width:48px;height:48px;border-radius:12px;background:${r.color}15;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${r.color}" stroke-width="2">${getIconPath(r.icon)}</svg></div>
+            <span class="status-badge status-active">متاح</span>
+          </div>
+          <h3>${r.title}</h3><p>${r.desc}</p>
+          <button class="btn-sm btn-gray" style="margin-top:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> تصدير PDF</button>
+        </div>
+      `).join('')}
+    </div>
+    <div class="card" style="margin-top:24px;background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(245,158,11,0.02));border-color:rgba(245,158,11,0.2)">
+      <div style="padding:20px">
+        <h3 style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg> ملاحظات مهمة لوزارة الحج</h3>
+        <div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:2">
+          • جميع التقارير متصلة مباشرة بقاعدة البيانات وتحديث آني كل 5 ثوانٍ<br>
+          • يمكن تصدير أي تقرير بصيغة PDF أو Excel<br>
+          • التقارير الحساسة تتطلب صلاحية "فرد حكومي" أو "أدمن"<br>
+          • البيانات مؤمنة ومشفرة - متوافقة مع معايير الأمن السيبراني
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ========== SETTINGS ==========
+function renderSettings(el) {
+  const integrations = [
+    {name:'منصة الحج الذكي',status:'مطلوب اعتماد وزارة الحج'},
+    {name:'أبشر (الهوية الرقمية)',status:'مطلوب اعتماد أمني'},
+    {name:'المرور السعودي',status:'مطلوب اعتماد'},
+    {name:'مركز المعلومات الوطني',status:'مطلوب اعتماد'}
+  ];
+
+  el.innerHTML = `
+    <div class="page-title mb-4"><h1>إعدادات النظام</h1><p>إعدادات عامة وصلاحيات المنصة</p></div>
+    <div class="card-grid">
+      <div class="card" style="grid-column:span 2">
+        <div style="padding:20px">
+          <h3 style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1DB954" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> الأمان والصلاحيات</h3>
+          ${['تسجيل الدخول بخطوتين (OTP)','تسجيل العمليات','تقييد IP','تشفير البيانات'].map((item,i)=>`
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+              <div><div style="font-size:14px">${item}</div><div style="font-size:12px;color:var(--muted)">وصف الميزة</div></div>
+              <div style="width:40px;height:22px;border-radius:11px;background:${i>1?'rgba(255,255,255,0.1)':'var(--green)'};position:relative;cursor:pointer">
+                <div style="position:absolute;top:2px;${i>1?'right': 'left'}:2px;width:18px;height:18px;border-radius:50%;background:#fff"></div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div style="padding:20px">
+          <h3 style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> التكاملات الحكومية</h3>
+          ${integrations.map(i=>`
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+              <span style="font-size:14px;color:rgba(255,255,255,0.7)">${i.name}</span>
+              <span style="font-size:12px;color:var(--amber)">${i.status}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ========== HELPERS ==========
+function getCompanyName(id) { return DB.companies.find(c=>c.id===id)?.name||'غير معروف'; }
+function getRouteName(id) { return DB.routes.find(r=>r.id===id)?.name||'غير معروف'; }
+function getPilgrimName(id) { return DB.pilgrims.find(p=>p.id===id)?.name||'غير معروف'; }
+
+// ========== MODAL ==========
+function showModal(content) {
+  const overlay = document.getElementById('modal-overlay');
+  overlay.innerHTML = `<div class="modal" onclick="event.stopPropagation()">${content}</div>`;
+  overlay.classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+// ========== INIT ==========
+window.addEventListener('DOMContentLoaded', () => {
+  router.navigate('landing');
+});
+</script>
+</body>
+</html>
